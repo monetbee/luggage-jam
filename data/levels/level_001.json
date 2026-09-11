@@ -1,0 +1,16 @@
+{
+  "id": 1,
+  "name": "Level 1",
+  "size": 6,
+  "luggages": [
+    { "id": "red_1", "row": 1, "col": 1, "color": "red", "direction": "right" },
+    { "id": "blue_1", "row": 3, "col": 2, "color": "blue", "direction": "left" },
+    { "id": "green_1", "row": 4, "col": 4, "color": "green", "direction": "up" }
+  ],
+  "walls": [
+    { "row": 2, "col": 2 },
+    { "row": 2, "col": 3 },
+    { "row": 3, "col": 5 },
+    { "row": 5, "col": 1 }
+  ]
+}
