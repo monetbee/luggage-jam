@@ -16,7 +16,7 @@ position = Vector2(215, 465)
 texture = ExtResource("3_tray")
 
 [node name="Board" type="Node2D" parent="." unique_id=344869854]
-position = Vector2(59, 309)
+position = Vector2(78, 351)
 
 [node name="HUD" type="CanvasLayer" parent="." unique_id=1546038057]
 
