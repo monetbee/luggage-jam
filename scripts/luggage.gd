@@ -24,15 +24,14 @@ const TEXTURE_MAP := {
 var row: int = 0
 var col: int = 0
 var color: String = "red"
-var direction: String = "right"
-var board_size: int = 6
 var collected: bool = false
+var selected: bool = false
 
 
 func _ready() -> void:
 	input_event.connect(_on_input_event)
 	_apply_texture()
-	_apply_direction_rotation()
+	set_selected(false)
 	queue_redraw()
 
 
@@ -53,22 +52,21 @@ func _apply_texture() -> void:
 		suitcase_body.scale = Vector2(factor, factor)
 	suitcase_body.centered = true
 	suitcase_body.offset = Vector2.ZERO
+	suitcase_body.rotation = 0.0
 
 
-func _apply_direction_rotation() -> void:
+func set_selected(value: bool) -> void:
+	selected = value
 	if suitcase_body == null:
 		return
-	match direction:
-		"up": suitcase_body.rotation = 0.0
-		"right": suitcase_body.rotation = PI * 0.5
-		"down": suitcase_body.rotation = PI
-		"left": suitcase_body.rotation = -PI * 0.5
-		_: suitcase_body.rotation = 0.0
 
-
-func refresh_direction() -> void:
-	_apply_direction_rotation()
-	queue_redraw()
+	if selected:
+		# Temporary rule-feedback only. Animation polish can replace this later.
+		suitcase_body.modulate = Color(1.0, 0.92, 0.68, 1.0)
+		z_index = 2
+	else:
+		suitcase_body.modulate = Color.WHITE
+		z_index = 0
 
 
 func _draw() -> void:
@@ -82,25 +80,11 @@ func _draw() -> void:
 
 
 func _on_input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		pressed.emit(self)
-	elif event is InputEventScreenTouch and event.pressed:
-		pressed.emit(self)
-
-
-func direction_to_vector(dir_name: String) -> Vector2:
-	match dir_name:
-		"up": return Vector2(0, -1)
-		"down": return Vector2(0, 1)
-		"left": return Vector2(-1, 0)
-		"right": return Vector2(1, 0)
-		_: return Vector2(0, -1)
-
-
-func direction_to_grid_vector(dir_name: String) -> Vector2i:
-	match dir_name:
-		"up": return Vector2i(-1, 0)
-		"down": return Vector2i(1, 0)
-		"left": return Vector2i(0, -1)
-		"right": return Vector2i(0, 1)
-		_: return Vector2i(-1, 0)
+	if event is InputEventMouseButton:
+		var mouse_event := event as InputEventMouseButton
+		if mouse_event.pressed and mouse_event.button_index == MOUSE_BUTTON_LEFT:
+			pressed.emit(self)
+	elif event is InputEventScreenTouch:
+		var touch_event := event as InputEventScreenTouch
+		if touch_event.pressed:
+			pressed.emit(self)
