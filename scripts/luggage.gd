@@ -44,11 +44,11 @@ func _apply_texture() -> void:
 		return
 
 	suitcase_body.texture = texture
-	var width := float(texture.get_width())
-	var height := float(texture.get_height())
-	var largest := max(width, height)
+	var width: float = float(texture.get_width())
+	var height: float = float(texture.get_height())
+	var largest: float = maxf(width, height)
 	if largest > 0.0:
-		var factor := 44.0 / largest
+		var factor: float = 44.0 / largest
 		suitcase_body.scale = Vector2(factor, factor)
 	suitcase_body.centered = true
 	suitcase_body.offset = Vector2.ZERO
@@ -59,15 +59,15 @@ func _draw() -> void:
 		return
 
 	if suitcase_body == null or suitcase_body.texture == null:
-		var size := 38.0
+		var size: float = 38.0
 		var base_color: Color = COLOR_MAP.get(color, Color.WHITE)
 		draw_rect(Rect2(-size * 0.5, -size * 0.5, size, size), base_color)
 
-	var dir_vector := direction_to_vector(direction)
-	var start := Vector2.ZERO
-	var tip := dir_vector * 13.0
+	var dir_vector: Vector2 = direction_to_vector(direction)
+	var start: Vector2 = Vector2.ZERO
+	var tip: Vector2 = dir_vector * 13.0
 	draw_line(start, tip, Color(1, 1, 1, 0.95), 4.0, true)
-	var perpendicular := Vector2(-dir_vector.y, dir_vector.x)
+	var perpendicular: Vector2 = Vector2(-dir_vector.y, dir_vector.x)
 	draw_line(tip, tip - dir_vector * 5.0 + perpendicular * 4.0, Color(1, 1, 1, 0.95), 3.0, true)
 	draw_line(tip, tip - dir_vector * 5.0 - perpendicular * 4.0, Color(1, 1, 1, 0.95), 3.0, true)
 
