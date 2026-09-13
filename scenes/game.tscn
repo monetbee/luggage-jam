@@ -1,9 +1,8 @@
-[gd_scene load_steps=5 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/game.gd" id="1_xk0d1"]
 [ext_resource type="Texture2D" path="res://assets/background.jpeg" id="2_bg"]
-[ext_resource type="Texture2D" path="res://assets/tray.png" id="3_tray"]
-[ext_resource type="Texture2D" path="res://assets/exit.png" id="4_exit"]
+[ext_resource type="Texture2D" path="res://assets/tray_01.png" id="3_tray"]
 
 [node name="Game" type="Node2D"]
 script = ExtResource("1_xk0d1")
@@ -20,11 +19,6 @@ centered = true
 
 [node name="Board" type="Node2D" parent="."]
 position = Vector2(59, 309)
-
-[node name="Exit" type="Sprite2D" parent="."]
-position = Vector2(397, 465)
-texture = ExtResource("4_exit")
-centered = true
 
 [node name="HUD" type="CanvasLayer" parent="."]
 
