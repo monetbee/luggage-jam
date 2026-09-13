@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c4ce2bnh1t3tl"
-path="res://.godot/imported/luggage_purple.png-8b88aa835e78487a3ee00165de7937ae.ctex"
+uid="uid://pjdxsgq3q2xn"
+path="res://.godot/imported/x_clear.png-7323e28d3911ff3c09e4eb77d25dbb88.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/luggage_purple.png"
-dest_files=["res://.godot/imported/luggage_purple.png-8b88aa835e78487a3ee00165de7937ae.ctex"]
+source_file="res://assets/x_clear.png"
+dest_files=["res://.godot/imported/x_clear.png-7323e28d3911ff3c09e4eb77d25dbb88.ctex"]
 
 [params]
 

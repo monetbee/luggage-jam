@@ -1,62 +1,76 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://c7h3i8f2n17er"]
 
-[ext_resource type="Script" path="res://scripts/game.gd" id="1_xk0d1"]
-[ext_resource type="Texture2D" path="res://assets/tray.png" id="2_q1xj1"]
+[ext_resource type="Script" uid="uid://c2e387pfti5n0" path="res://scripts/game.gd" id="1_xk0d1"]
+[ext_resource type="Texture2D" uid="uid://j4viud1cmvq3" path="res://assets/background.jpeg" id="2_bg"]
+[ext_resource type="Texture2D" uid="uid://bbqqsp6jl2med" path="res://assets/tray_01.png" id="3_tray"]
 
-[node name="Game" type="Node2D"]
+[node name="Game" type="Node2D" unique_id=152194977]
 script = ExtResource("1_xk0d1")
 
-[node name="Tray" type="Sprite2D" parent="."]
+[node name="Background" type="Sprite2D" parent="." unique_id=1200894358]
 position = Vector2(215, 466)
-texture = ExtResource("2_q1xj1")
-scale = Vector2(0.25, 0.25)
-centered = true
+texture = ExtResource("2_bg")
 
-[node name="Board" type="Node2D" parent="."]
-position = Vector2(59, 310)
+[node name="Tray" type="Sprite2D" parent="." unique_id=2007188975]
+position = Vector2(215, 465)
+texture = ExtResource("3_tray")
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="Board" type="Node2D" parent="." unique_id=344869854]
+position = Vector2(78, 351)
 
-[node name="MarginContainer" type="MarginContainer" parent="HUD"]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1546038057]
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=161040606]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/margin_left = 18
-theme_override_constants/margin_top = 18
-theme_override_constants/margin_right = 18
-theme_override_constants/margin_bottom = 18
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 42
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 34
 
-[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=456389013]
 layout_mode = 2
 
-[node name="TopBar" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="TopBar" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer" unique_id=1200712010]
 layout_mode = 2
 
-[node name="LevelLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/TopBar"]
+[node name="LevelLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/TopBar" unique_id=306110441]
 layout_mode = 2
+theme_override_font_sizes/font_size = 24
 text = "Level 1"
 
-[node name="CoinsLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/TopBar"]
+[node name="CoinsLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer/TopBar" unique_id=1411029342]
 layout_mode = 2
 size_flags_horizontal = 3
-horizontal_alignment = 2
+theme_override_font_sizes/font_size = 22
 text = "Coins: 0"
+horizontal_alignment = 2
 
-[node name="StatusLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="StatusLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=1924485781]
 layout_mode = 2
+theme_override_font_sizes/font_size = 18
 text = "Ready"
 
-[node name="BottomBar" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer"]
+[node name="Spacer" type="Control" parent="HUD/MarginContainer/VBoxContainer" unique_id=1647770998]
 layout_mode = 2
-size_flags_vertical = 10
+size_flags_vertical = 3
+
+[node name="BottomBar" type="HBoxContainer" parent="HUD/MarginContainer/VBoxContainer" unique_id=1729629872]
+layout_mode = 2
+theme_override_constants/separation = 14
 alignment = 1
 
-[node name="HintButton" type="Button" parent="HUD/MarginContainer/VBoxContainer/BottomBar"]
+[node name="HintButton" type="Button" parent="HUD/MarginContainer/VBoxContainer/BottomBar" unique_id=371861373]
+custom_minimum_size = Vector2(140, 64)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Hint"
 
-[node name="ShuffleButton" type="Button" parent="HUD/MarginContainer/VBoxContainer/BottomBar"]
+[node name="ShuffleButton" type="Button" parent="HUD/MarginContainer/VBoxContainer/BottomBar" unique_id=254368001]
+custom_minimum_size = Vector2(140, 64)
 layout_mode = 2
+theme_override_font_sizes/font_size = 20
 text = "Shuffle"
