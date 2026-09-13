@@ -12,11 +12,11 @@ const COLOR_MAP := {
 }
 
 const TEXTURE_MAP := {
-	"red": preload("res://assets/luggage_red.png"),
-	"blue": preload("res://assets/luggage_blue.png"),
-	"green": preload("res://assets/luggage_green.png"),
-	"yellow": preload("res://assets/luggage_yellow.png"),
-	"purple": preload("res://assets/luggage_purple.png"),
+	"red": preload("res://assets/luggage_red＿clear.png"),
+	"blue": preload("res://assets/luggage_blue_clear.png"),
+	"green": preload("res://assets/luggage_green_clear.png"),
+	"yellow": preload("res://assets/luggage_yellow_clear.png"),
+	"purple": preload("res://assets/luggage_purple_clear.png"),
 }
 
 @onready var suitcase_body: Sprite2D = $VisualRoot/SuitcaseBody
@@ -32,6 +32,7 @@ var collected: bool = false
 func _ready() -> void:
 	input_event.connect(_on_input_event)
 	_apply_texture()
+	_apply_direction_rotation()
 	queue_redraw()
 
 
@@ -54,6 +55,22 @@ func _apply_texture() -> void:
 	suitcase_body.offset = Vector2.ZERO
 
 
+func _apply_direction_rotation() -> void:
+	if suitcase_body == null:
+		return
+	match direction:
+		"up": suitcase_body.rotation = 0.0
+		"right": suitcase_body.rotation = PI * 0.5
+		"down": suitcase_body.rotation = PI
+		"left": suitcase_body.rotation = -PI * 0.5
+		_: suitcase_body.rotation = 0.0
+
+
+func refresh_direction() -> void:
+	_apply_direction_rotation()
+	queue_redraw()
+
+
 func _draw() -> void:
 	if collected:
 		return
@@ -62,14 +79,6 @@ func _draw() -> void:
 		var size: float = 38.0
 		var base_color: Color = COLOR_MAP.get(color, Color.WHITE)
 		draw_rect(Rect2(-size * 0.5, -size * 0.5, size, size), base_color)
-
-	var dir_vector: Vector2 = direction_to_vector(direction)
-	var start: Vector2 = Vector2.ZERO
-	var tip: Vector2 = dir_vector * 13.0
-	draw_line(start, tip, Color(1, 1, 1, 0.95), 4.0, true)
-	var perpendicular: Vector2 = Vector2(-dir_vector.y, dir_vector.x)
-	draw_line(tip, tip - dir_vector * 5.0 + perpendicular * 4.0, Color(1, 1, 1, 0.95), 3.0, true)
-	draw_line(tip, tip - dir_vector * 5.0 - perpendicular * 4.0, Color(1, 1, 1, 0.95), 3.0, true)
 
 
 func _on_input_event(_viewport: Viewport, event: InputEvent, _shape_idx: int) -> void:
