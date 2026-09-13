@@ -6,7 +6,6 @@ const WALL_TEXTURE: Texture2D = preload("res://assets/x.jpeg")
 
 @onready var board: Node2D = $Board
 @onready var tray: Sprite2D = $Tray
-@onready var exit_sprite: Sprite2D = $Exit
 @onready var level_label: Label = $HUD/MarginContainer/VBoxContainer/TopBar/LevelLabel
 @onready var coins_label: Label = $HUD/MarginContainer/VBoxContainer/TopBar/CoinsLabel
 @onready var status_label: Label = $HUD/MarginContainer/VBoxContainer/StatusLabel
@@ -30,8 +29,8 @@ func _ready() -> void:
 
 
 func _configure_visuals() -> void:
-	_fit_sprite_to_width(tray, 390.0)
-	_fit_sprite_to_width(exit_sprite, 96.0)
+	# tray_01 already contains the visual exit, so scale the complete tray as one asset.
+	_fit_sprite_to_width(tray, 430.0)
 
 
 func _fit_sprite_to_width(sprite: Sprite2D, target_width: float) -> void:
