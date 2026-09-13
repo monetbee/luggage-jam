@@ -2,8 +2,11 @@ extends Node2D
 
 const CELL_SIZE := 52
 const LUGGAGE_SCENE := preload("res://scenes/luggage.tscn")
+const WALL_TEXTURE := preload("res://assets/x.jpeg")
 
 @onready var board: Node2D = $Board
+@onready var tray: Sprite2D = $Tray
+@onready var exit_sprite: Sprite2D = $Exit
 @onready var level_label: Label = $HUD/MarginContainer/VBoxContainer/TopBar/LevelLabel
 @onready var coins_label: Label = $HUD/MarginContainer/VBoxContainer/TopBar/CoinsLabel
 @onready var status_label: Label = $HUD/MarginContainer/VBoxContainer/StatusLabel
@@ -20,9 +23,25 @@ var collected_count: int = 0
 
 func _ready() -> void:
 	save_data = SaveManager.load_save()
+	_configure_visuals()
 	load_level(level_number)
 	hint_button.pressed.connect(_on_hint_pressed)
 	shuffle_button.pressed.connect(_on_shuffle_pressed)
+
+
+func _configure_visuals() -> void:
+	_fit_sprite_to_width(tray, 390.0)
+	_fit_sprite_to_width(exit_sprite, 96.0)
+
+
+func _fit_sprite_to_width(sprite: Sprite2D, target_width: float) -> void:
+	if sprite == null or sprite.texture == null:
+		return
+	var texture_width := float(sprite.texture.get_width())
+	if texture_width <= 0.0:
+		return
+	var factor := target_width / texture_width
+	sprite.scale = Vector2(factor, factor)
 
 
 func load_level(level_id: int) -> void:
@@ -36,21 +55,25 @@ func load_level(level_id: int) -> void:
 	luggages.clear()
 	for child in board.get_children():
 		child.queue_free()
-	
+
 	var board_size := int(level_data.get("size", 6))
 	for row in range(board_size):
 		for col in range(board_size):
 			var tile_node := ColorRect.new()
-			tile_node.color = Color(0.72, 0.61, 0.46, 0.12)
-			tile_node.size = Vector2(CELL_SIZE, CELL_SIZE)
-			tile_node.position = board_position_for(row, col) - Vector2(CELL_SIZE * 0.5, CELL_SIZE * 0.5)
+			tile_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+			tile_node.color = Color(1.0, 1.0, 1.0, 0.055)
+			tile_node.size = Vector2(CELL_SIZE - 2, CELL_SIZE - 2)
+			tile_node.position = board_position_for(row, col) - Vector2((CELL_SIZE - 2) * 0.5, (CELL_SIZE - 2) * 0.5)
 			board.add_child(tile_node)
+
 	for wall in level_data.get("walls", []):
-		walls[Vector2i(int(wall["row"]), int(wall["col"]))] = true
-		var wall_node := ColorRect.new()
-		wall_node.color = Color(0.27, 0.29, 0.35, 1.0)
-		wall_node.size = Vector2(CELL_SIZE, CELL_SIZE)
-		wall_node.position = board_position_for(int(wall["row"]), int(wall["col"])) - Vector2(CELL_SIZE * 0.5, CELL_SIZE * 0.5)
+		var wall_row := int(wall["row"])
+		var wall_col := int(wall["col"])
+		walls[Vector2i(wall_row, wall_col)] = true
+		var wall_node := Sprite2D.new()
+		wall_node.texture = WALL_TEXTURE
+		wall_node.position = board_position_for(wall_row, wall_col)
+		_fit_sprite_to_cell(wall_node, 46.0)
 		board.add_child(wall_node)
 
 	for luggage_data in level_data.get("luggages", []):
@@ -65,6 +88,18 @@ func load_level(level_id: int) -> void:
 		luggages.append(luggage)
 
 
+func _fit_sprite_to_cell(sprite: Sprite2D, target_size: float) -> void:
+	if sprite.texture == null:
+		return
+	var width := float(sprite.texture.get_width())
+	var height := float(sprite.texture.get_height())
+	var largest := max(width, height)
+	if largest <= 0.0:
+		return
+	var factor := target_size / largest
+	sprite.scale = Vector2(factor, factor)
+
+
 func board_position_for(row: int, col: int) -> Vector2:
 	return Vector2(col * CELL_SIZE + CELL_SIZE * 0.5, row * CELL_SIZE + CELL_SIZE * 0.5)
 
@@ -72,29 +107,28 @@ func board_position_for(row: int, col: int) -> Vector2:
 func _on_luggage_pressed(luggage: Luggage) -> void:
 	if luggage.collected:
 		return
-	var current := Vector2i(luggage.row, luggage.col)
-	var direction_vector := luggage.direction_to_vector(luggage.direction)
-	var next := current + Vector2i(direction_vector)
-	var step := 0
+
+	var direction_vector := luggage.direction_to_grid_vector(luggage.direction)
+	var board_size := int(level_data.get("size", 6))
+	var moved := false
+
 	while true:
-		if next.x < 0 or next.x >= int(level_data.get("size", 6)) or next.y < 0 or next.y >= int(level_data.get("size", 6)):
+		var next_row := luggage.row + direction_vector.x
+		var next_col := luggage.col + direction_vector.y
+
+		if next_row < 0 or next_row >= board_size or next_col < 0 or next_col >= board_size:
 			collect_luggage(luggage)
 			return
-		if walls.has(next):
-			status_label.text = "Blocked"
-			return
-		if has_luggage_at(next.x, next.y):
-			status_label.text = "Blocked"
-			return
-		luggage.row = next.x
-		luggage.col = next.y
-		luggage.position = board_position_for(luggage.row, luggage.col)
-		step += 1
-		if step >= 5:
-			break
-		next = Vector2i(luggage.row, luggage.col) + Vector2i(direction_vector)
 
-	status_label.text = "Moved"
+		var next_cell := Vector2i(next_row, next_col)
+		if walls.has(next_cell) or has_luggage_at(next_row, next_col):
+			status_label.text = "Blocked" if not moved else "Moved"
+			return
+
+		luggage.row = next_row
+		luggage.col = next_col
+		luggage.position = board_position_for(luggage.row, luggage.col)
+		moved = true
 
 
 func has_luggage_at(row: int, col: int) -> bool:
@@ -120,10 +154,10 @@ func _on_hint_pressed() -> void:
 
 
 func _on_shuffle_pressed() -> void:
+	var directions := ["up", "down", "left", "right"]
 	for luggage in luggages:
 		if luggage.collected:
 			continue
-		var directions := ["up", "down", "left", "right"]
 		luggage.direction = directions[randi() % directions.size()]
 		luggage.queue_redraw()
 	status_label.text = "Board shuffled"
