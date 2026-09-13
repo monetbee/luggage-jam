@@ -2,7 +2,6 @@ extends Node2D
 
 const CELL_SIZE: int = 52
 const LUGGAGE_SCENE: PackedScene = preload("res://scenes/luggage.tscn")
-const WALL_TEXTURE: Texture2D = preload("res://assets/x.jpeg")
 
 @onready var board: Node2D = $Board
 @onready var tray: Sprite2D = $Tray
@@ -69,11 +68,7 @@ func load_level(level_id: int) -> void:
 		var wall_row: int = int(wall.get("row", 0))
 		var wall_col: int = int(wall.get("col", 0))
 		walls[Vector2i(wall_row, wall_col)] = true
-		var wall_node: Sprite2D = Sprite2D.new()
-		wall_node.texture = WALL_TEXTURE
-		wall_node.position = board_position_for(wall_row, wall_col)
-		_fit_sprite_to_cell(wall_node, 46.0)
-		board.add_child(wall_node)
+		_create_wall_visual(wall_row, wall_col)
 
 	for luggage_data: Dictionary in level_data.get("luggages", []):
 		var luggage: Luggage = LUGGAGE_SCENE.instantiate() as Luggage
@@ -89,16 +84,24 @@ func load_level(level_id: int) -> void:
 		luggages.append(luggage)
 
 
-func _fit_sprite_to_cell(sprite: Sprite2D, target_size: float) -> void:
-	if sprite.texture == null:
-		return
-	var width: float = float(sprite.texture.get_width())
-	var height: float = float(sprite.texture.get_height())
-	var largest: float = maxf(width, height)
-	if largest <= 0.0:
-		return
-	var factor: float = target_size / largest
-	sprite.scale = Vector2(factor, factor)
+func _create_wall_visual(row: int, col: int) -> void:
+	var block_size: float = 46.0
+	var wall_node: ColorRect = ColorRect.new()
+	wall_node.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	wall_node.color = Color(0.16, 0.17, 0.20, 1.0)
+	wall_node.size = Vector2(block_size, block_size)
+	wall_node.position = board_position_for(row, col) - Vector2(block_size * 0.5, block_size * 0.5)
+	board.add_child(wall_node)
+
+	var x_label: Label = Label.new()
+	x_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	x_label.text = "×"
+	x_label.size = Vector2(block_size, block_size)
+	x_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	x_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	x_label.add_theme_font_size_override("font_size", 34)
+	x_label.add_theme_color_override("font_color", Color(0.62, 0.65, 0.70, 1.0))
+	wall_node.add_child(x_label)
 
 
 func board_position_for(row: int, col: int) -> Vector2:
