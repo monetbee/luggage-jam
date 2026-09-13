@@ -1,16 +1,21 @@
 {
   "id": 1,
   "name": "Level 1",
-  "size": 6,
+  "rows": 3,
+  "cols": 4,
   "luggages": [
-    { "id": "red_1", "row": 1, "col": 1, "color": "red", "direction": "right" },
-    { "id": "blue_1", "row": 3, "col": 2, "color": "blue", "direction": "left" },
-    { "id": "green_1", "row": 4, "col": 4, "color": "green", "direction": "up" }
+    { "id": "red_1", "row": 0, "col": 0, "color": "red" },
+    { "id": "yellow_1", "row": 0, "col": 1, "color": "yellow" },
+    { "id": "green_1", "row": 0, "col": 2, "color": "green" },
+    { "id": "purple_1", "row": 0, "col": 3, "color": "purple" },
+
+    { "id": "red_2", "row": 1, "col": 0, "color": "red" },
+    { "id": "blue_1", "row": 1, "col": 1, "color": "blue" },
+    { "id": "yellow_2", "row": 1, "col": 2, "color": "yellow" },
+    { "id": "blue_2", "row": 1, "col": 3, "color": "blue" },
+
+    { "id": "red_3", "row": 2, "col": 1, "color": "red" },
+    { "id": "yellow_3", "row": 2, "col": 2, "color": "yellow" }
   ],
-  "walls": [
-    { "row": 2, "col": 2 },
-    { "row": 2, "col": 3 },
-    { "row": 3, "col": 5 },
-    { "row": 5, "col": 1 }
-  ]
+  "walls": []
 }
