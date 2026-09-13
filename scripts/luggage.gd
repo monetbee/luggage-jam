@@ -12,7 +12,7 @@ const COLOR_MAP := {
 }
 
 const TEXTURE_MAP := {
-	"red": preload("res://assets/luggage_red＿clear.png"),
+	"red": preload("res://assets/luggage_red_clear.png"),
 	"blue": preload("res://assets/luggage_blue_clear.png"),
 	"green": preload("res://assets/luggage_green_clear.png"),
 	"yellow": preload("res://assets/luggage_yellow_clear.png"),

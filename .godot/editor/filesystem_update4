@@ -2,3 +2,4 @@ res://scripts/luggage.gd
 res://scenes/luggage.tscn
 res://scripts/game.gd
 res://scripts/main_menu.gd
+res://scenes/game.tscn
